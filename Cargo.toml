@@ -58,7 +58,10 @@ brotli-decompressor = { version = "4.0.0", optional = true }
 http-02 = { package = "http", version = "0.2", optional = true }
 http = { version = "1.1", optional = true }
 url = "2.5.0"
-rustls = { version = "0.23.19", optional = true, default-features = false, features = ["ring", "logging", "std", "tls12"] }
+# aws_lc_rs rather than ring. A build that unifies features across a workspace
+# applies a dependent's requested features whether or not the optional dep is
+# enabled, so naming ring here puts it in rustls for every crate.
+rustls = { version = "0.23.19", optional = true, default-features = false, features = ["aws_lc_rs", "logging", "std", "tls12"] }
 
 # This can't be in dev-dependencies due to doc tests.
 hootbin = { version = "0.1.5", optional = true }
@@ -66,7 +69,9 @@ hootbin = { version = "0.1.5", optional = true }
 [dev-dependencies]
 env_logger = { version = "<=0.9", default-features = false, features = ["humantime"] }
 serde = { version = "1", features = ["derive"] }
-rustls = { version = "0.23.5", default-features = false, features = ["std", "ring"] }
+# aws_lc_rs rather than ring, for the same reason as the optional dependency
+# above: dev-dependencies of a third-party crate can contribute features too.
+rustls = { version = "0.23.5", default-features = false, features = ["std", "aws_lc_rs"] }
 rustls-pemfile = { version = "2.0" }
 
 [[example]]
